@@ -65,8 +65,19 @@ export const hotelControllers = {
   },
   getHotelsByType: async (req, res, next) => {
     try {
-      const hotels = await hotelsModel.find(req.params.id);
-      res.status(200).json(hotels);
+      const hotelCount = await hotelsModel.countDocuments({ type: 'hotel' });
+      const apartmentCount = hotelsModel.countDocuments({ type: 'apartment' });
+      const resortCount = hotelsModel.countDocuments({ type: 'resort' });
+      const villaCount = hotelsModel.countDocuments({ type: 'villa' });
+      const cabinCount = hotelsModel.countDocuments({ type: 'cabin' });
+      res.status(200).json([
+        { type: 'hotel', hotelCount },
+        { type: 'apartment', apartmentCount },
+        { type: 'resort', resortCount },
+        { type: 'cabin', villaCount },
+        { type: 'villa', villaCount },
+        { type: 'cabin', cabinCount },
+      ]);
     } catch (err) {
       next();
     }
